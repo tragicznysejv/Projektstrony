@@ -4,6 +4,9 @@ using System.Text;
 
 namespace BookSystem.Model
 {
+    /// <summary>
+    /// 
+    /// </summary>
     internal class Author
     {
     }
