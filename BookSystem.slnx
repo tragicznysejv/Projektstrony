@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="BookSystem.Database/BookSystem.Database.csproj" />
+  <Project Path="BookSystem.Model/BookSystem.Model.csproj" />
+  <Project Path="BookSystem.UI.AspNet/BookSystem.UI.AspNet.csproj" />
+</Solution>
