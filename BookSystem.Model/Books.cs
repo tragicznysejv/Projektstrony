@@ -7,7 +7,7 @@ public class Books
 {
 	public Books()
 	{
-
+		public int id;
 	}
 
 	//
