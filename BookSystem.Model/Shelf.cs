@@ -37,7 +37,7 @@ namespace BookSystem.Model
         /// Identyfikator właściciela półki - klucz obcy.
         /// </summary>
         [Required]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         /// <summary>
         /// Identyfikator książki przypisanej do półki - klucz obcy.

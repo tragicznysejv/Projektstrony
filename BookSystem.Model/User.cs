@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace BookSystem.Model
 {
@@ -9,13 +10,8 @@ namespace BookSystem.Model
     /// Klasa reprezentująca użytkownika w systemie wirtualnej biblioteczki.
     /// Przechowuje dane personalne oraz logowania.
     /// </summary>
-    public class User
+    public class User :IdentityUser
     {
-        /// <summary>
-        /// Unikalny identyfikator użytkownika.
-        /// </summary>
-        [Key]
-        public int UserId { get; set; }
 
         /// <summary>
         /// Imię użytkownika.
@@ -29,27 +25,6 @@ namespace BookSystem.Model
         /// </summary>
         [Required(ErrorMessage = "Nazwisko jest wymagane")]
         public string? LastName { get; set; }
-
-        /// <summary>
-        /// Nazwa użytkownika.
-        /// </summary>
-        [Required(ErrorMessage = "Nazwa użytkownika jest wymagana")]
-        public string? UserName { get; set; }
-
-
-        /// <summary>
-        /// Adres e-mail użytkownika.
-        /// </summary>
-        [Required(ErrorMessage = "Adres e-mail jest wymagany")]
-        [EmailAddress(ErrorMessage = "Niepoprawny format adresu e-mail.")]
-        public string? Email { get; set; }
-
-
-        /// <summary>
-        /// Hasło użytkownika.
-        /// </summary>
-        [Required(ErrorMessage = "Hasło jest wymagane")]
-        public string? Password { get; set; }
 
 
         /// <summary>
