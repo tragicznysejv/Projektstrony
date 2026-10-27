@@ -37,7 +37,7 @@ namespace BookSystem.Model
         /// Identyfikator właściciela półki - klucz obcy.
         /// </summary>
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
 
         /// <summary>
         /// Identyfikator książki przypisanej do półki - klucz obcy.
@@ -46,10 +46,9 @@ namespace BookSystem.Model
         public int BookId { get; set; }
 
         /// <summary>
-        /// Status czytania książki.
+        /// Status czytania książki (null - książka tylko w ulubionych, bez statusu).
         /// </summary>
-        [Required]
-        public ShelfStatus Status { get; set; }
+        public ShelfStatus? Status { get; set; }
 
         /// <summary>
         /// Flaga określająca czy książka znajduje się w ulubionych.

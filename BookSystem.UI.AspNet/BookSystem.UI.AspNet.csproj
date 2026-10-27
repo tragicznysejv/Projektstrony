@@ -29,4 +29,8 @@
     <ProjectReference Include="..\BookSystem.Model\BookSystem.Model.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<None Update="SeedData\*.csv" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+	</ItemGroup>
+
 </Project>

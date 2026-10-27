@@ -107,7 +107,8 @@ namespace BookSystem.Database.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId", "BookId")
+                        .IsUnique();
 
                     b.ToTable("Comments");
                 });
@@ -126,7 +127,7 @@ namespace BookSystem.Database.Migrations
                     b.Property<bool>("IsFavourite")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Status")
+                    b.Property<int?>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -137,7 +138,8 @@ namespace BookSystem.Database.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId", "BookId")
+                        .IsUnique();
 
                     b.ToTable("Shelfs");
                 });
@@ -374,7 +376,7 @@ namespace BookSystem.Database.Migrations
                     b.HasOne("BookSystem.Model.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Book");
@@ -393,7 +395,7 @@ namespace BookSystem.Database.Migrations
                     b.HasOne("BookSystem.Model.User", "User")
                         .WithMany("Shelfs")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Book");

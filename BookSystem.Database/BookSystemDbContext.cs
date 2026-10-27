@@ -58,14 +58,15 @@ namespace BookSystem.Database
                 .HasOne(s => s.User)
                 .WithMany(u => u.Shelfs)
                 .HasForeignKey(s => s.UserId)
-                .OnDelete(DeleteBehavior.Restrict); // Zapobiega usunięciu użytkownika, jeśli na półkach znajdują się przypisane do niego książki.
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Relacja: Użytkownik -> Komentarz (1:N)
             builder.Entity<Comment>()
                 .HasOne(c => c.User)
                 .WithMany(u => u.Comments)
                 .HasForeignKey(c => c.UserId)
-                .OnDelete(DeleteBehavior.Restrict); // Zabezpiecza przed błędem "multiple cascade paths" na serwerze SQL.
+                .OnDelete(DeleteBehavior.Cascade);
+
 
             // Relacja: Autor -> Książka (1:N)
             builder.Entity<Book>()
@@ -73,6 +74,21 @@ namespace BookSystem.Database
                 .WithMany(a => a.Books)
                 .HasForeignKey(b => b.AuthorId)
                 .OnDelete(DeleteBehavior.Cascade); // Usunięcie autora z systemu spowoduje usunięcie wszystkich jego książek.
+
+            // Jedna książka może wystąpić na półce danego użytkownika tylko raz.
+            builder.Entity<Shelf>()
+                .HasIndex(s => new { s.UserId, s.BookId })
+                .IsUnique();
+
+            // Zasada unikalności głosu: jeden użytkownik = jedna recenzja/ocena danej książki.
+            builder.Entity<Comment>()
+                .HasIndex(c => new { c.UserId, c.BookId })
+                .IsUnique();
+
+            // Jedna książka może wystąpić na półce danego użytkownika tylko raz.
+            builder.Entity<Shelf>()
+                .HasIndex(s => new { s.UserId, s.BookId })
+                .IsUnique();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace BookSystem.Model
         /// Identyfikator użytkownika, który dodał komentarz - klucz obcy.
         /// </summary>
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
 
         /// <summary>
         /// Data i czas dodania komentarza.
