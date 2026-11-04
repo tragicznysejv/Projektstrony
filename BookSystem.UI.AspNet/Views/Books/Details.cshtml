@@ -1,0 +1,29 @@
+﻿@model BookSystem.Model.Book
+
+<h1>@Model.Title</h1>
+<p>Autor: @Model.Author?.FirstName @Model.Author?.LastName</p>
+<p>Opis: @Model.Description</p>
+<a asp-controller="Books" asp-action="Index">⬅ Powrót do listy</a>
+
+<hr />
+
+<a asp-controller="Comments" asp-action="Create" asp-route-bookId="@Model.BookId" style="display:inline-block; margin-bottom: 20px; padding:10px; background:#ddd;">
+    ➕ Dodaj opinię i ocenę
+</a>
+
+<form asp-controller="Shelfs" asp-action="UpdateShelf" method="post" style="padding: 10px; border: 1px solid black;">
+    <h3>Dodaj do wirtualnej półki</h3>
+    <input type="hidden" name="bookId" value="@Model.BookId" />
+
+    <select name="status">
+        <option value="PlanToRead">Do przeczytania</option>
+        <option value="Reading">W trakcie</option>
+        <option value="Read">Przeczytane</option>
+    </select>
+
+    <label>
+        <input type="checkbox" name="isFavourite" value="true" /> Ulubiona?
+    </label>
+
+    <button type="submit">Zapisz na półce</button>
+</form>

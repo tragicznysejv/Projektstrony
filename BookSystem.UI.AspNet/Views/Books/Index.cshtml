@@ -1,0 +1,28 @@
+﻿@model IEnumerable<BookSystem.Model.Book>
+
+<h1>Katalog wszystkich książek</h1>
+<a asp-controller="Home" asp-action="Index">⬅ Powrót do strony głównej</a>
+
+<table border="1" style="margin-top: 20px; width: 100%; text-align: left;">
+    <thead>
+        <tr>
+            <th>Tytuł</th>
+            <th>Autor</th>
+            <th>Numer ISBN</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Author?.FirstName @item.Author?.LastName</td>
+                <td>@item.ISBN</td>
+                <td>
+                    <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">Szczegóły i oceny</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

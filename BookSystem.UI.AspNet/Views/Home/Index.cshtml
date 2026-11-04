@@ -1,8 +1,20 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model IEnumerable<BookSystem.Model.Book>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h1>Strona Główna - BookSystem</h1>
+<p>Gratulacje, kontroler działa i przekazuje dane!</p>
+
+<div style="margin-bottom: 20px;">
+    <a asp-controller="Books" asp-action="Index" style="font-size: 20px; font-weight: bold;">📚 Przejdź do pełnego katalogu książek</a>
 </div>
+
+<h2>Ostatnio dodane książki:</h2>
+<ul>
+    @foreach (var book in Model)
+    {
+        <li>
+            <strong>@book.Title</strong> (Wydano: @book.PublishDate.ToShortDateString())
+            <br />
+            Autor: @book.Author?.FirstName @book.Author?.LastName
+        </li>
+    }
+</ul>

@@ -1,0 +1,27 @@
+﻿@model BookSystem.Model.Comment
+
+<h1>Oceń książkę</h1>
+
+@Html.ValidationSummary(false, "", new { style = "color: red; font-weight: bold;" })
+
+<form asp-controller="Comments" asp-action="Create" method="post">
+    <input type="hidden" asp-for="BookId" />
+
+    <div style="margin-bottom: 10px;">
+        <label>Ocena (1-5):</label><br />
+        <input asp-for="Rating" type="number" min="1" max="5" required />
+    </div>
+
+    <div style="margin-bottom: 10px;">
+        <label>Tytuł recenzji:</label><br />
+        <input asp-for="Title" type="text" />
+    </div>
+
+    <div style="margin-bottom: 10px;">
+        <label>Treść:</label><br />
+        <textarea asp-for="Description" required rows="4" cols="40"></textarea>
+    </div>
+
+    <button type="submit">Zapisz ocenę</button>
+    <a href="javascript:history.back()">Anuluj</a>
+</form>

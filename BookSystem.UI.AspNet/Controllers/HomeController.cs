@@ -1,25 +1,35 @@
 using BookSystem.UI.AspNet.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using BookSystem.Database;
+using Microsoft.EntityFrameworkCore;
 
-namespace BookSystem.UI.AspNet.Controllers
+namespace BookSystem.UI.AspNet.Controllers;
+/// <summary>
+/// Główny kontroler aplikacji, odpowiedzialny za wyświetlanie strony głównej z najnowszymi książkami w systemie.
+/// </summary>
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly BookSystemDbContext _context;
+    /// <summary>
+    /// Inicjalizuje kontroler i wstrzykuje połączenie z bazą danych.
+    /// </summary>
+    /// <param name="context">Kontekst bazy danych aplikacji.</param>
+    public HomeController(BookSystemDbContext context)
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        _context = context;
+    }
+    /// <summary>
+    /// Wyświetla stronę główną aplikacji z listą najnowszych książek w systemie.
+    /// </summary>
+    /// <returns>Widok strony głównej z listą polecanych tytułów</returns>
+    public async Task<IActionResult> Index()
+    {
+        var recentBooks = await _context.Books
+            .Include(b => b.Author)
+            .OrderByDescending(b => b.PublishDate)
+            .Take(10)
+            .ToListAsync();
+        return View(recentBooks);
     }
 }

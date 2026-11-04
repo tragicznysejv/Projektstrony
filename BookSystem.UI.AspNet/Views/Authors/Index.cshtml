@@ -1,0 +1,24 @@
+﻿@model IEnumerable<BookSystem.Model.Author>
+
+<h1>Katalog Autorów</h1>
+<a asp-controller="Home" asp-action="Index">⬅ Powrót do strony głównej</a>
+
+<table border="1" style="margin-top: 20px; width: 100%; text-align: left;">
+    <thead>
+        <tr>
+            <th>Imię i nazwisko</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var author in Model)
+        {
+            <tr>
+                <td>@author.FirstName @author.LastName</td>
+                <td>
+                    <a asp-controller="Authors" asp-action="Details" asp-route-id="@author.AuthorId">Zobacz książki</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,22 @@
+﻿@model BookSystem.Model.Author
+
+<h1>@Model.FirstName @Model.LastName</h1>
+<a asp-controller="Authors" asp-action="Index">⬅ Powrót do listy autorów</a>
+
+<h2 style="margin-top: 20px;">Książki tego autora:</h2>
+<ul>
+    @if (Model.Books != null && Model.Books.Any())
+    {
+        foreach (var book in Model.Books)
+        {
+            <li>
+                <strong>@book.Title</strong>
+                <a asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId" style="margin-left: 10px;">[Przejdź do książki]</a>
+            </li>
+        }
+    }
+    else
+    {
+        <li>Ten autor nie ma jeszcze przypisanych książek w bazie.</li>
+    }
+</ul>
