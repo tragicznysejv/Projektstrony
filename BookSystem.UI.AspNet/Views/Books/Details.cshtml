@@ -1,29 +1,114 @@
 ﻿@model BookSystem.Model.Book
+@{
+    ViewData["Title"] = Model.Title;
+}
 
-<h1>@Model.Title</h1>
-<p>Autor: @Model.Author?.FirstName @Model.Author?.LastName</p>
-<p>Opis: @Model.Description</p>
-<a asp-controller="Books" asp-action="Index">⬅ Powrót do listy</a>
+<div class="row">
+    <!-- Główna sekcja z informacjami o książce i recenzjami -->
+    <div class="col-md-8">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">@Model.Title</h3>
+                <span class="badge bg-secondary fs-6">Wydano: @Model.PublishDate.Year</span>
+            </div>
+            <div class="card-body">
+                <h5 class="mb-3">
+                    Autor: <a asp-controller="Authors" asp-action="Details" asp-route-id="@Model.AuthorId" class="text-decoration-none">@(Model.Author?.FirstName) @(Model.Author?.LastName)</a>
+                </h5>
+                <p><strong>ISBN:</strong> @Model.ISBN</p>
+                <hr />
+                <h6>Opis:</h6>
+                <p class="card-text">@(string.IsNullOrEmpty(Model.Description) ? "Brak opisu dla tej książki." : Model.Description)</p>
+            </div>
+            <div class="card-footer">
+                <a asp-action="Index" class="btn btn-secondary">Wróć do katalogu</a>
+            </div>
+        </div>
 
-<hr />
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Recenzje i Komentarze</h4>
+                @if (User.Identity!.IsAuthenticated)
+                {
+                    <a asp-controller="Comments" asp-action="Create" asp-route-bookId="@Model.BookId" class="btn btn-primary btn-sm">Dodaj recenzję</a>
+                }
+            </div>
+            <div class="card-body">
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <div class="alert alert-warning py-2">
+                        <a asp-area="Identity" asp-page="/Account/Login" class="alert-link">Zaloguj się</a>, aby dodać komentarz.
+                    </div>
+                }
 
-<a asp-controller="Comments" asp-action="Create" asp-route-bookId="@Model.BookId" style="display:inline-block; margin-bottom: 20px; padding:10px; background:#ddd;">
-    ➕ Dodaj opinię i ocenę
-</a>
+                @if (Model.Comments != null && Model.Comments.Any())
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var comment in Model.Comments.OrderByDescending(c => c.PublishDate))
+                        {
+                            <li class="list-group-item px-0">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1 fw-bold">@(comment.Title ?? "Brak tytułu")</h6>
+                                    <small class="text-muted">@comment.PublishDate.ToString("g")</small>
+                                </div>
+                                <p class="mb-1">@comment.Description</p>
+                                <small class="badge bg-success">Ocena: @comment.Rating / 5</small>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted mb-0">Ta książka nie ma jeszcze żadnych recenzji.</p>
+                }
+            </div>
+        </div>
+    </div>
 
-<form asp-controller="Shelfs" asp-action="UpdateShelf" method="post" style="padding: 10px; border: 1px solid black;">
-    <h3>Dodaj do wirtualnej półki</h3>
-    <input type="hidden" name="bookId" value="@Model.BookId" />
+    <!-- Panel boczny: Wirtualna Półka -->
+    <div class="col-md-4">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="card shadow-sm border-info">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Zarządzaj Półką</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="Shelfs" asp-action="UpdateShelf" method="post">
+                        <input type="hidden" name="bookId" value="@Model.BookId" />
 
-    <select name="status">
-        <option value="PlanToRead">Do przeczytania</option>
-        <option value="Reading">W trakcie</option>
-        <option value="Read">Przeczytane</option>
-    </select>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Status czytania:</label>
+                            <select name="status" class="form-select">
+                                <option value="">Wybierz status...</option>
+                                <option value="PlanToRead">W planach</option>
+                                <option value="Reading">W trakcie czytania</option>
+                                <option value="Read">Przeczytane</option>
+                            </select>
+                        </div>
 
-    <label>
-        <input type="checkbox" name="isFavourite" value="true" /> Ulubiona?
-    </label>
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" name="isFavourite" value="true" id="favCheck">
+                            <label class="form-check-label" for="favCheck">Dodaj do ulubionych</label>
+                        </div>
 
-    <button type="submit">Zapisz na półce</button>
-</form>
+                        <button type="submit" class="btn btn-success w-100 mb-2">Zapisz na półce</button>
+                    </form>
+
+                    <form asp-controller="Shelfs" asp-action="RemoveFromShelf" method="post">
+                        <input type="hidden" name="bookId" value="@Model.BookId" />
+                        <button type="submit" class="btn btn-outline-danger w-100">Usuń z półki</button>
+                    </form>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <p class="mb-0">Zaloguj się, aby dodać tę książkę do swojej półki.</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -59,5 +59,6 @@ namespace BookSystem.Model
         /// Kolekcja komentarzy przypisanych do książki.
         /// </summary>
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
     }
 }

@@ -1,0 +1,72 @@
+﻿@model IEnumerable<BookSystem.Model.Shelf>
+@{
+    ViewData["Title"] = "Moja Wirtualna Półka";
+}
+
+<h2 class="mb-4">Moja Wirtualna Półka</h2>
+
+@if (Model != null && Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Książka</th>
+                    <th>Autor</th>
+                    <th>Status</th>
+                    <th class="text-center">Ulubiona</th>
+                    <th class="text-end">Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId" class="text-decoration-none fw-bold text-dark">
+                                @(item.Book?.Title)
+                            </a>
+                        </td>
+                        <td>@(item.Book?.Author?.FirstName) @(item.Book?.Author?.LastName)</td>
+                        <td>
+                            @switch (item.Status)
+                            {
+                                case BookSystem.Model.ShelfStatus.PlanToRead:
+                                    <span class="badge bg-secondary">W planach</span>
+                                    break;
+                                case BookSystem.Model.ShelfStatus.Reading:
+                                    <span class="badge bg-primary">W trakcie czytania</span>
+                                    break;
+                                case BookSystem.Model.ShelfStatus.Read:
+                                    <span class="badge bg-success">Przeczytane</span>
+                                    break;
+                                default:
+                                    <span class="text-muted">-</span>
+                                    break;
+                            }
+                        </td>
+                        <td class="text-center fs-5">
+                            @if (item.IsFavourite)
+                            {
+                                <span class="text-warning" title="Ulubiona">★</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            <form asp-action="RemoveFromShelf" method="post" class="d-inline">
+                                <input type="hidden" name="bookId" value="@item.BookId" />
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Usuń</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info shadow-sm">
+        <h5 class="alert-heading">Twoja półka jest pusta!</h5>
+        <p class="mb-0">Przejdź do <a asp-controller="Books" asp-action="Index" class="alert-link">Katalogu Książek</a>, aby odkryć i dodać nowe tytuły do swojej kolekcji.</p>
+    </div>
+}

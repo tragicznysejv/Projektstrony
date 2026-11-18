@@ -1,20 +1,42 @@
 ﻿@model IEnumerable<BookSystem.Model.Book>
+@{
+    ViewData["Title"] = "Strona Główna";
+}
 
-<h1>Strona Główna - BookSystem</h1>
-<p>Gratulacje, kontroler działa i przekazuje dane!</p>
-
-<div style="margin-bottom: 20px;">
-    <a asp-controller="Books" asp-action="Index" style="font-size: 20px; font-weight: bold;">📚 Przejdź do pełnego katalogu książek</a>
+<div class="text-center mb-5">
+    <h1 class="display-4">Witaj w BookSystem</h1>
+    <p class="lead">Odkrywaj nowe tytuły i zarządzaj swoją wirtualną biblioteczką.</p>
 </div>
 
-<h2>Ostatnio dodane książki:</h2>
-<ul>
-    @foreach (var book in Model)
+<h3 class="mb-4">Ostatnio dodane książki</h3>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @if (Model != null && Model.Any())
     {
-        <li>
-            <strong>@book.Title</strong> (Wydano: @book.PublishDate.ToShortDateString())
-            <br />
-            Autor: @book.Author?.FirstName @book.Author?.LastName
-        </li>
+        foreach (var book in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@book.Title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            @(book.Author?.FirstName) @(book.Author?.LastName)
+                        </h6>
+                        <p class="card-text small text-muted">
+                            Wydano: @book.PublishDate.ToShortDateString()
+                        </p>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId" class="btn btn-outline-primary btn-sm w-100">Szczegóły</a>
+                    </div>
+                </div>
+            </div>
+        }
     }
-</ul>
+    else
+    {
+        <div class="col-12">
+            <p class="text-muted">Brak książek w systemie.</p>
+        </div>
+    }
+</div>

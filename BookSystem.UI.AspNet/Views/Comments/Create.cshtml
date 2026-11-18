@@ -1,27 +1,48 @@
 ﻿@model BookSystem.Model.Comment
+@{
+    ViewData["Title"] = "Dodaj Komentarz";
+}
 
-<h1>Oceń książkę</h1>
+<h2 class="mb-4">Oceń Książkę</h2>
 
-@Html.ValidationSummary(false, "", new { style = "color: red; font-weight: bold;" })
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+            <input type="hidden" asp-for="BookId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-<form asp-controller="Comments" asp-action="Create" method="post">
-    <input type="hidden" asp-for="BookId" />
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label fw-bold">Tytuł recenzji (opcjonalnie)</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
 
-    <div style="margin-bottom: 10px;">
-        <label>Ocena (1-5):</label><br />
-        <input asp-for="Rating" type="number" min="1" max="5" required />
+            <div class="mb-3">
+                <label asp-for="Rating" class="form-label fw-bold">Ocena</label>
+                <select asp-for="Rating" class="form-select">
+                    <option value="5">5 - Rewelacyjna</option>
+                    <option value="4">4 - Bardzo dobra</option>
+                    <option value="3">3 - Przeciętna</option>
+                    <option value="2">2 - Słaba</option>
+                    <option value="1">1 - Beznadziejna</option>
+                </select>
+                <span asp-validation-for="Rating" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label fw-bold">Treść komentarza</label>
+                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary me-2">Opublikuj komentarz</button>
+                <a asp-controller="Books" asp-action="Details" asp-route-id="@Model.BookId" class="btn btn-secondary">Anuluj</a>
+            </div>
+        </form>
     </div>
+</div>
 
-    <div style="margin-bottom: 10px;">
-        <label>Tytuł recenzji:</label><br />
-        <input asp-for="Title" type="text" />
-    </div>
-
-    <div style="margin-bottom: 10px;">
-        <label>Treść:</label><br />
-        <textarea asp-for="Description" required rows="4" cols="40"></textarea>
-    </div>
-
-    <button type="submit">Zapisz ocenę</button>
-    <a href="javascript:history.back()">Anuluj</a>
-</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
