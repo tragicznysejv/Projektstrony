@@ -3,7 +3,7 @@
     ViewData["Title"] = "Katalog Książek";
 }
 
-<h2 class="text-center mb-4">Katalog Książek</h2>
+<h2 class="text-center mb-4" style="color: var(--text-dark);">Katalog Książek</h2>
 
 <form asp-action="Index" method="get" class="d-flex mb-4">
     <input type="text" name="searchString" class="form-control me-2" placeholder="Szukaj po tytule lub nazwisku autora..." value="@Context.Request.Query["searchString"]" />
@@ -13,38 +13,51 @@
 
 @if (Model != null && Model.Any())
 {
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        @foreach (var book in Model)
-        {
-            <div class="col">
-                <div class="card h-100 shadow-sm book-card">
-                    <div class="text-center pt-4 px-3">
-                        <a asp-action="Details" asp-route-id="@book.BookId">
-                            <img src="@(book.CoverUrl?.Replace("-L.jpg", "-M.jpg") ?? Url.Content("~/images/no-cover.svg"))"
-                                 onerror="this.onerror=null;this.src='@Url.Content("~/images/no-cover.svg")'"
-                                 alt="Okładka: @book.Title" class="book-cover" loading="lazy" />
-                        </a>
-                    </div>
-                    <div class="card-body text-center">
-                        <h5 class="card-title mb-1">@book.Title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            @(book.Author?.FirstName) @(book.Author?.LastName)
-                        </h6>
-                        <p class="card-text small text-muted mb-1">
-                            Wydano: @book.PublishDate.ToShortDateString()
-                        </p>
-                        <p class="card-text small text-muted mb-0">
-                            ISBN: @book.ISBN
-                        </p>
-                    </div>
-                    <div class="card-footer bg-transparent border-top-0 pb-3 px-3">
-                        <a asp-action="Details" asp-route-id="@book.BookId" class="btn btn-beige-outline btn-sm w-100">
-                            Szczegóły
-                        </a>
-                    </div>
-                </div>
+    <div class="card shadow-sm" style="background-color: var(--card-bg); border-color: var(--border-beige);">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" style="background-color: transparent;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--border-beige);">
+                            <th class="text-center py-3" style="width: 120px; color: var(--text-dark);">Okładka</th>
+                            <th class="py-3" style="color: var(--text-dark);">Książka</th>
+                            <th class="py-3" style="color: var(--text-dark);">Autor</th>
+                            <th class="py-3" style="color: var(--text-dark);">Szczegóły wydania</th>
+                            <th class="text-end py-3 pe-4" style="color: var(--text-dark);">Akcje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var book in Model)
+                        {
+                            <tr style="border-bottom-color: var(--border-beige);">
+                                <td class="text-center py-3">
+                                    <a asp-action="Details" asp-route-id="@book.BookId">
+                                        <img src="@(book.CoverUrl?.Replace("-L.jpg", "-M.jpg") ?? Url.Content("~/images/no-cover.svg"))"
+                                             onerror="this.onerror=null;this.src='@Url.Content("~/images/no-cover.svg")'"
+                                             alt="Okładka: @book.Title" class="rounded shadow-sm" style="height: 90px; object-fit: cover;" loading="lazy" />
+                                    </a>
+                                </td>
+                                <td class="fw-bold" style="color: var(--text-dark); font-size: 1.1rem;">
+                                    @book.Title
+                                </td>
+                                <td style="color: var(--text-dark);">
+                                    @(book.Author?.FirstName) @(book.Author?.LastName)
+                                </td>
+                                <td class="text-muted small">
+                                    <span class="d-block mb-1">Wydano: @book.PublishDate.ToShortDateString()</span>
+                                    <span class="d-block">ISBN: @book.ISBN</span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <a asp-action="Details" asp-route-id="@book.BookId" class="btn btn-beige-outline px-4">
+                                        Szczegóły
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
-        }
+        </div>
     </div>
 }
 else

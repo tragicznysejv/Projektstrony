@@ -1,4 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap');
 html {
+    font-family: 'Merriweather', serif;
     font-size: 14px;
     position: relative;
     min-height: 100%;
