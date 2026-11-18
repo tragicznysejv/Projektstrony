@@ -84,6 +84,7 @@ namespace BookSystem.UI.AspNet
 
                 await IdentitySeeder.SeedAsync(services, app.Configuration, logger);
                 await CsvDataSeeder.SeedAsync(context, Path.Combine(app.Environment.ContentRootPath, "SeedData"), logger);
+                await CoverSeeder.SeedAsync(context, Path.Combine(app.Environment.ContentRootPath, "SeedData"), logger);
             }
             catch (Exception ex)
             {

@@ -44,6 +44,12 @@ namespace BookSystem.Model
         /// </summary>
         public string? Description { get; set; }
 
+        /// <summary>
+        /// Adres URL okładki książki (null - brak okładki, widok pokazuje obrazek zastępczy).
+        /// </summary>
+        [StringLength(500)]
+        [Url(ErrorMessage = "Niepoprawny adres URL okładki.")]
+        public string? CoverUrl { get; set; }
 
         /// <summary>
         /// Nawigacja do autora przypisanego do książki.
