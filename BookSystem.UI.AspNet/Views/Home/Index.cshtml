@@ -4,8 +4,8 @@
 }
 
 <div class="text-center mb-5">
-    <h1 class="display-4">Witaj w BookSystem</h1>
-    <p class="lead">Odkrywaj nowe tytuły i zarządzaj swoją wirtualną biblioteczką.</p>
+    <h1 class="display-4">Witaj w Wirtualnej bibliotece</h1>
+    <p class="lead text-muted">Odkrywaj nowe tytuły i zarządzaj swoją wirtualną biblioteczką.</p>
 </div>
 
 <h3 class="mb-4">Ostatnio dodane książki</h3>
@@ -16,18 +16,27 @@
         foreach (var book in Model)
         {
             <div class="col">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">@book.Title</h5>
+                <div class="card h-100 shadow-sm book-card">
+                    <div class="text-center pt-4 px-3">
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId">
+                            <img src="@(book.CoverUrl?.Replace("-L.jpg", "-M.jpg") ?? Url.Content("~/images/no-cover.svg"))"
+                                 onerror="this.onerror=null;this.src='@Url.Content("~/images/no-cover.svg")'"
+                                 alt="Okładka: @book.Title" class="book-cover" loading="lazy" />
+                        </a>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title mb-1">@book.Title</h5>
                         <h6 class="card-subtitle mb-2 text-muted">
                             @(book.Author?.FirstName) @(book.Author?.LastName)
                         </h6>
-                        <p class="card-text small text-muted">
+                        <p class="card-text small text-muted mb-0">
                             Wydano: @book.PublishDate.ToShortDateString()
                         </p>
                     </div>
-                    <div class="card-footer bg-transparent border-top-0">
-                        <a asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId" class="btn btn-outline-primary btn-sm w-100">Szczegóły</a>
+                    <div class="card-footer bg-transparent border-top-0 pb-3 px-3">
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId" class="btn btn-beige-outline btn-sm w-100">
+                            Szczegóły
+                        </a>
                     </div>
                 </div>
             </div>

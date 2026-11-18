@@ -18,6 +18,12 @@ namespace BookSystem.UI.AspNet.Areas.Identity.Pages.Account
         private readonly UserManager<User> _userManager;
         private readonly ILogger<RegisterModel> _logger;
 
+        /// <summary>
+        /// Inicjalizuje model rejestracji i wstrzykuje wymagane serwisy tożsamości oraz logger.
+        /// </summary>
+        /// <param name="signInManager">Menedżer obsługujący logowanie użytkowników.</param>
+        /// <param name="userManager">Menedżer zarządzający kontami użytkowników.</param>
+        /// <param name="logger">Logger do zapisywania zdarzeń rejestracji.</param>
         public RegisterModel(SignInManager<User> signInManager, UserManager<User> userManager, ILogger<RegisterModel> logger)
         {
             _signInManager = signInManager;
@@ -35,38 +41,63 @@ namespace BookSystem.UI.AspNet.Areas.Identity.Pages.Account
         /// <summary>Pola formularza rejestracji.</summary>
         public class InputModel
         {
+            /// <summary>
+            /// Imie rejestrowanego użytkownika.
+            /// </summary>
             [Required(ErrorMessage = "Imię jest wymagane.")]
             [StringLength(50)]
             [Display(Name = "Imię")]
             public string FirstName { get; set; } = string.Empty;
 
+            /// <summary>
+            /// Nazwisko rejestrowanego użytkownika.
+            /// </summary>
             [Required(ErrorMessage = "Nazwisko jest wymagane.")]
             [StringLength(50)]
             [Display(Name = "Nazwisko")]
             public string LastName { get; set; } = string.Empty;
 
+            /// <summary>
+            /// Adres e-mail użytkownika, służy również jako login.
+            /// </summary>
             [Required(ErrorMessage = "E-mail jest wymagany.")]
             [EmailAddress(ErrorMessage = "Niepoprawny adres e-mail.")]
             [Display(Name = "E-mail")]
             public string Email { get; set; } = string.Empty;
 
+            /// <summary>
+            /// Hasło do nowego konta.
+            /// </summary>
             [Required(ErrorMessage = "Hasło jest wymagane.")]
             [StringLength(100, MinimumLength = 8, ErrorMessage = "Hasło musi mieć od {2} do {1} znaków.")]
             [DataType(DataType.Password)]
             [Display(Name = "Hasło")]
             public string Password { get; set; } = string.Empty;
 
+            /// <summary>
+            /// Potwierdzenie hasla wprowadzonego w formularzu.
+            /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Powtórz hasło")]
             [Compare(nameof(Password), ErrorMessage = "Hasła nie są identyczne.")]
             public string ConfirmPassword { get; set; } = string.Empty;
         }
 
+        /// <summary>
+        /// Obsługuje żądanie GET i wyświetla formularz rejestracji.
+        /// </summary>
+        /// <param name="returnUrl">Opcjonalny adres powrotny po rejestracji.</param>
         public void OnGet(string? returnUrl = null)
         {
             ReturnUrl = returnUrl;
         }
 
+
+        /// <summary>
+        /// Obsługuje żądanie POST, tworzy nowe konto użytkownika i przypisuje mu rolę.
+        /// </summary>
+        /// <param name="returnUrl">Opcjonalny adres powrotny po rejestracji.</param>
+        /// <returns>Przekierowanie po udanej rejestracji lub ponowne wyświetlenie formularza z błędami.</returns>
         public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");

@@ -1,34 +1,53 @@
 ﻿@model BookSystem.Model.Author
 @{
-    ViewData["Title"] = $"Szczegóły autora: {Model.FirstName} {Model.LastName}";
+    ViewData["Title"] = $"{Model.FirstName} {Model.LastName}";
 }
 
-<div class="card shadow-sm mb-4">
-    <div class="card-header bg-primary text-white">
-        <h3 class="mb-0">@Model.FirstName @Model.LastName</h3>
-    </div>
-    <div class="card-body">
-        <h4 class="card-title mb-3">Książki tego autora:</h4>
-        @if (Model.Books != null && Model.Books.Any())
+<div class="text-center mb-4 pb-3 border-bottom" style="border-color: var(--border-beige) !important;">
+    <h2 class="display-5 mb-2">@Model.FirstName @Model.LastName</h2>
+    <p class="text-muted mb-0">Książki tego autora w naszej bibliotece</p>
+</div>
+
+@if (Model.Books != null && Model.Books.Any())
+{
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+        @foreach (var book in Model.Books)
         {
-            <ul class="list-group list-group-flush">
-                @foreach (var book in Model.Books)
-                {
-                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                        <span>
-                            <strong>@book.Title</strong> <span class="text-muted">(ISBN: @book.ISBN)</span>
-                        </span>
-                        <a asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId" class="btn btn-sm btn-outline-secondary">Zobacz książkę</a>
-                    </li>
-                }
-            </ul>
-        }
-        else
-        {
-            <p class="text-muted">Ten autor nie ma przypisanych żadnych książek w systemie.</p>
+            <div class="col">
+                <div class="card h-100 shadow-sm book-card">
+                    <div class="text-center pt-4 px-3">
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId">
+                            <img src="@(book.CoverUrl?.Replace("-L.jpg", "-M.jpg") ?? Url.Content("~/images/no-cover.svg"))"
+                                 onerror="this.onerror=null;this.src='@Url.Content("~/images/no-cover.svg")'"
+                                 alt="Okładka: @book.Title" class="book-cover" loading="lazy" />
+                        </a>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title mb-1">@book.Title</h5>
+                        <p class="card-text small text-muted mb-1">
+                            Wydano: @book.PublishDate.ToShortDateString()
+                        </p>
+                        <p class="card-text small text-muted mb-0">
+                            ISBN: @book.ISBN
+                        </p>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0 pb-3 px-3">
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@book.BookId" class="btn btn-beige-outline btn-sm w-100">
+                            Szczegóły
+                        </a>
+                    </div>
+                </div>
+            </div>
         }
     </div>
-    <div class="card-footer">
-        <a asp-action="Index" class="btn btn-secondary">Powrót do listy autorów</a>
+}
+else
+{
+    <div class="text-center my-5">
+        <p class="text-muted">Ten autor nie ma jeszcze przypisanych żadnych książek w systemie.</p>
     </div>
+}
+
+<div class="text-center mb-4">
+    <a asp-action="Index" class="btn btn-beige-secondary">Powrót do listy autorów</a>
 </div>

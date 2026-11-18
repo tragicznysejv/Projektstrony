@@ -3,41 +3,60 @@
     ViewData["Title"] = Model.Title;
 }
 
-<div class="row">
-    <!-- Główna sekcja z informacjami o książce i recenzjami -->
+<div class="row mt-3">
+    <!-- Główna sekcja: Okładka, informacje o książce i recenzje -->
     <div class="col-md-8">
-        <div class="card shadow-sm mb-4">
-            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                <h3 class="mb-0">@Model.Title</h3>
-                <span class="badge bg-secondary fs-6">Wydano: @Model.PublishDate.Year</span>
+        <div class="card shadow-sm mb-4" style="background-color: var(--card-bg); border-color: var(--border-beige);">
+            <div class="card-header d-flex justify-content-between align-items-center" style="background-color: var(--nav-beige); border-bottom-color: var(--border-beige);">
+                <h3 class="mb-0" style="color: var(--text-dark);">@Model.Title</h3>
+                <span class="badge" style="background-color: var(--accent-brown);">Wydano: @Model.PublishDate.Year</span>
             </div>
             <div class="card-body">
-                <h5 class="mb-3">
-                    Autor: <a asp-controller="Authors" asp-action="Details" asp-route-id="@Model.AuthorId" class="text-decoration-none">@(Model.Author?.FirstName) @(Model.Author?.LastName)</a>
-                </h5>
-                <p><strong>ISBN:</strong> @Model.ISBN</p>
-                <hr />
-                <h6>Opis:</h6>
-                <p class="card-text">@(string.IsNullOrEmpty(Model.Description) ? "Brak opisu dla tej książki." : Model.Description)</p>
+                <div class="row g-4 align-items-start">
+                    <!-- Duża okładka -->
+                    <div class="col-sm-4 text-center">
+                        <img src="@(Model.CoverUrl ?? Url.Content("~/images/no-cover.svg"))"
+                             onerror="this.onerror=null;this.src='@Url.Content("~/images/no-cover.svg")'"
+                             alt="Okładka: @Model.Title" class="book-cover book-cover-lg" />
+                    </div>
+
+                    <!-- Szczegóły i opis -->
+                    <div class="col-sm-8">
+                        <h5 class="mb-2">
+                            Autor:
+                            <a asp-controller="Authors" asp-action="Details" asp-route-id="@Model.AuthorId" class="text-decoration-none" style="color: var(--accent-brown);">
+                                @(Model.Author?.FirstName) @(Model.Author?.LastName)
+                            </a>
+                        </h5>
+                        <p class="mb-1 small text-muted"><strong>ISBN:</strong> @Model.ISBN</p>
+                        <p class="mb-3 small text-muted"><strong>Data wydania:</strong> @Model.PublishDate.ToShortDateString()</p>
+                        <hr style="border-color: var(--border-beige);" />
+                        <h6>Opis:</h6>
+                        <p class="card-text">
+                            @(string.IsNullOrEmpty(Model.Description) ? "Brak opisu dla tej książki." : Model.Description)
+                        </p>
+                    </div>
+                </div>
             </div>
-            <div class="card-footer">
-                <a asp-action="Index" class="btn btn-secondary">Wróć do katalogu</a>
+            <div class="card-footer bg-transparent" style="border-top-color: var(--border-beige);">
+                <a asp-action="Index" class="btn btn-beige-secondary btn-sm">Wróć do katalogu</a>
             </div>
         </div>
 
-        <div class="card shadow-sm">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="mb-0">Recenzje i Komentarze</h4>
-                @if (User.Identity!.IsAuthenticated)
+        <!-- Sekcja recenzji i komentarzy -->
+        <div class="card shadow-sm mb-4" style="background-color: var(--card-bg); border-color: var(--border-beige);">
+            <div class="card-header d-flex justify-content-between align-items-center" style="background-color: var(--nav-beige); border-bottom-color: var(--border-beige);">
+                <h4 class="mb-0" style="color: var(--text-dark);">Recenzje i Komentarze</h4>
+                @if (User.Identity?.IsAuthenticated == true)
                 {
-                    <a asp-controller="Comments" asp-action="Create" asp-route-bookId="@Model.BookId" class="btn btn-primary btn-sm">Dodaj recenzję</a>
+                    <a asp-controller="Comments" asp-action="Create" asp-route-bookId="@Model.BookId" class="btn btn-beige btn-sm">Dodaj recenzję</a>
                 }
             </div>
             <div class="card-body">
-                @if (!User.Identity.IsAuthenticated)
+                @if (User.Identity?.IsAuthenticated != true)
                 {
-                    <div class="alert alert-warning py-2">
-                        <a asp-area="Identity" asp-page="/Account/Login" class="alert-link">Zaloguj się</a>, aby dodać komentarz.
+                    <div class="alert py-2 mb-3" style="background-color: var(--bg-beige); border: 1px solid var(--border-beige);">
+                        <a asp-area="Identity" asp-page="/Account/Login" class="fw-bold text-decoration-none" style="color: var(--accent-brown);">Zaloguj się</a>, aby dodać komentarz.
                     </div>
                 }
 
@@ -46,13 +65,13 @@
                     <ul class="list-group list-group-flush">
                         @foreach (var comment in Model.Comments.OrderByDescending(c => c.PublishDate))
                         {
-                            <li class="list-group-item px-0">
+                            <li class="list-group-item bg-transparent px-0" style="border-color: var(--border-beige);">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1 fw-bold">@(comment.Title ?? "Brak tytułu")</h6>
+                                    <h6 class="mb-1 fw-bold">@(comment.Title ?? "Recenzja")</h6>
                                     <small class="text-muted">@comment.PublishDate.ToString("g")</small>
                                 </div>
-                                <p class="mb-1">@comment.Description</p>
-                                <small class="badge bg-success">Ocena: @comment.Rating / 5</small>
+                                <p class="mb-2">@comment.Description</p>
+                                <span class="badge" style="background-color: var(--accent-brown);">Ocena: @comment.Rating / 5</span>
                             </li>
                         }
                     </ul>
@@ -67,11 +86,11 @@
 
     <!-- Panel boczny: Wirtualna Półka -->
     <div class="col-md-4">
-        @if (User.Identity.IsAuthenticated)
+        @if (User.Identity?.IsAuthenticated == true)
         {
-            <div class="card shadow-sm border-info">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0">Zarządzaj Półką</h5>
+            <div class="card shadow-sm" style="background-color: var(--card-bg); border-color: var(--border-beige);">
+                <div class="card-header" style="background-color: var(--nav-beige); border-bottom-color: var(--border-beige);">
+                    <h5 class="mb-0" style="color: var(--text-dark);">Zarządzaj Półką</h5>
                 </div>
                 <div class="card-body">
                     <form asp-controller="Shelfs" asp-action="UpdateShelf" method="post">
@@ -92,7 +111,7 @@
                             <label class="form-check-label" for="favCheck">Dodaj do ulubionych</label>
                         </div>
 
-                        <button type="submit" class="btn btn-success w-100 mb-2">Zapisz na półce</button>
+                        <button type="submit" class="btn btn-beige w-100 mb-2">Zapisz na półce</button>
                     </form>
 
                     <form asp-controller="Shelfs" asp-action="RemoveFromShelf" method="post">
@@ -104,9 +123,9 @@
         }
         else
         {
-            <div class="card shadow-sm">
+            <div class="card shadow-sm" style="background-color: var(--card-bg); border-color: var(--border-beige);">
                 <div class="card-body text-center">
-                    <p class="mb-0">Zaloguj się, aby dodać tę książkę do swojej półki.</p>
+                    <p class="mb-0 text-muted">Zaloguj się, aby dodać tę książkę do swojej półki.</p>
                 </div>
             </div>
         }

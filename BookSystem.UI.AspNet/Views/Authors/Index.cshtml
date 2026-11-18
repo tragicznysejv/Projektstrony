@@ -3,32 +3,34 @@
     ViewData["Title"] = "Katalog Autorów";
 }
 
-<h2 class="mb-4">Katalog Autorów</h2>
+<h2 class="text-center mb-4">Katalog Autorów</h2>
 
 <form asp-action="Index" method="get" class="d-flex mb-4">
     <input type="text" name="searchString" class="form-control me-2" placeholder="Szukaj po imieniu lub nazwisku..." value="@Context.Request.Query["searchString"]" />
-    <button type="submit" class="btn btn-primary">Szukaj</button>
-    <a asp-action="Index" class="btn btn-secondary ms-2">Wyczyść</a>
+    <button type="submit" class="btn btn-beige">Szukaj</button>
+    <a asp-action="Index" class="btn btn-beige-secondary ms-2">Wyczyść</a>
 </form>
 
-<table class="table table-striped table-hover align-middle">
-    <thead class="table-dark">
-        <tr>
-            <th>Imię</th>
-            <th>Nazwisko</th>
-            <th class="text-end">Akcje</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var author in Model)
-        {
+<div class="table-beige-wrapper shadow-sm">
+    <table class="table table-hover align-middle mb-0 table-beige">
+        <thead>
             <tr>
-                <td>@author.FirstName</td>
-                <td>@author.LastName</td>
-                <td class="text-end">
-                    <a asp-action="Details" asp-route-id="@author.AuthorId" class="btn btn-info btn-sm text-white">Szczegóły</a>
-                </td>
+                <th class="ps-3">Imię</th>
+                <th>Nazwisko</th>
+                <th class="text-end pe-3">Akcje</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var author in Model)
+            {
+                <tr>
+                    <td class="ps-3">@author.FirstName</td>
+                    <td>@author.LastName</td>
+                    <td class="text-end pe-3">
+                        <a asp-action="Details" asp-route-id="@author.AuthorId" class="btn btn-beige-outline btn-sm">Szczegóły</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

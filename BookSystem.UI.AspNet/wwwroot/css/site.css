@@ -1,31 +1,132 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+:root {
+    --bg-beige: #f6f1e7; /* Jasny, ciepły beż tła */
+    --nav-beige: #dfd0b8; /* Nieco ciemniejszy beż dla paska nawigacji */
+    --card-bg: #fffdf9; /* Kremowa biel dla kafelków */
+    --border-beige: #d2c0a3; /* Delikatne beżowe ramki */
+    --accent-brown: #7c5c43; /* Ciepły brąz na przyciski i akcenty */
+    --accent-brown-hover: #5e4430;
+    --text-dark: #382c23; /* Ciemny brąz zamiast czystej czerni */
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: var(--bg-beige);
+    color: var(--text-dark);
+}
+
+/* Górny paskek nawigacji */
+.navbar {
+    background-color: var(--nav-beige) !important;
+    border-bottom: 1px solid var(--border-beige) !important;
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--accent-brown);
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+    color: var(--bs-secondary-color);
+    text-align: end;
 }
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+    text-align: start;
+}
+
+/* Kafelki książek */
+.book-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-beige);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+    .book-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 14px rgba(56, 44, 35, 0.08) !important;
+    }
+
+/* Przycisk w odcieniu ciepłego brązu */
+.btn-beige-outline {
+    color: var(--accent-brown);
+    border: 1px solid var(--accent-brown);
+    background-color: transparent;
+}
+
+    .btn-beige-outline:hover {
+        color: #ffffff;
+        background-color: var(--accent-brown);
+        border-color: var(--accent-brown);
+    }
+
+/* Jednakowy rozmiar okładek */
+.book-cover {
+    width: 100%;
+    max-width: 150px;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.book-cover-lg {
+    max-width: 300px;
+}
+
+/* Pełny przycisk w kolorze ciepłego brązu */
+.btn-beige {
+    background-color: var(--accent-brown);
+    color: #ffffff;
+    border: 1px solid var(--accent-brown);
+}
+
+    .btn-beige:hover {
+        background-color: var(--accent-brown-hover);
+        border-color: var(--accent-brown-hover);
+        color: #ffffff;
+    }
+
+/* Stonowany przycisk pomocniczy  */
+.btn-beige-secondary {
+    background-color: #e6dac8;
+    color: var(--text-dark);
+    border: 1px solid var(--border-beige);
+}
+
+    .btn-beige-secondary:hover {
+        background-color: #d8c8b0;
+        color: var(--text-dark);
+    }
+
+/* Tabela w beżowym motywie */
+.table-beige-wrapper {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-beige);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.table-beige thead {
+    background-color: var(--nav-beige);
+    color: var(--text-dark);
+}
+
+.table-beige th {
+    border-bottom: 1px solid var(--border-beige);
+    font-weight: 600;
+}
+
+.table-beige td {
+    border-color: #efe6d8;
 }

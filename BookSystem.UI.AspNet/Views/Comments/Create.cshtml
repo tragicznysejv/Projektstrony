@@ -3,43 +3,52 @@
     ViewData["Title"] = "Dodaj Komentarz";
 }
 
-<h2 class="mb-4">Oceń Książkę</h2>
-
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Create" method="post">
-            <input type="hidden" asp-for="BookId" />
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-
-            <div class="mb-3">
-                <label asp-for="Title" class="form-label fw-bold">Tytuł recenzji (opcjonalnie)</label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+<div class="row justify-content-center mt-4 mb-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm" style="background-color: var(--card-bg); border-color: var(--border-beige);">
+            <div class="card-header py-3" style="background-color: var(--nav-beige); border-bottom-color: var(--border-beige);">
+                <h1 class="h3 mb-0" style="color: var(--text-dark);">Oceń Książkę</h1>
             </div>
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post">
+                    <input type="hidden" asp-for="BookId" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-            <div class="mb-3">
-                <label asp-for="Rating" class="form-label fw-bold">Ocena</label>
-                <select asp-for="Rating" class="form-select">
-                    <option value="5">5 - Rewelacyjna</option>
-                    <option value="4">4 - Bardzo dobra</option>
-                    <option value="3">3 - Przeciętna</option>
-                    <option value="2">2 - Słaba</option>
-                    <option value="1">1 - Beznadziejna</option>
-                </select>
-                <span asp-validation-for="Rating" class="text-danger"></span>
-            </div>
+                    <div class="mb-3">
+                        <label asp-for="Title" class="form-label fw-bold" style="color: var(--text-dark);">Tytuł recenzji (opcjonalnie)</label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger small"></span>
+                    </div>
 
-            <div class="mb-3">
-                <label asp-for="Description" class="form-label fw-bold">Treść komentarza</label>
-                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
+                    <div class="mb-3">
+                        <label asp-for="Rating" class="form-label fw-bold" style="color: var(--text-dark);">Ocena</label>
+                        <select asp-for="Rating" class="form-select">
+                            <option value="5">5 - Rewelacyjna</option>
+                            <option value="4">4 - Bardzo dobra</option>
+                            <option value="3">3 - Przeciętna</option>
+                            <option value="2">2 - Słaba</option>
+                            <option value="1">1 - Beznadziejna</option>
+                        </select>
+                        <span asp-validation-for="Rating" class="text-danger small"></span>
+                    </div>
 
-            <div class="mt-4">
-                <button type="submit" class="btn btn-primary me-2">Opublikuj komentarz</button>
-                <a asp-controller="Books" asp-action="Details" asp-route-id="@Model.BookId" class="btn btn-secondary">Anuluj</a>
+                    <div class="mb-4">
+                        <label asp-for="Description" class="form-label fw-bold" style="color: var(--text-dark);">Treść komentarza</label>
+                        <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-beige px-4">
+                            Opublikuj komentarz
+                        </button>
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@Model.BookId" class="btn btn-secondary px-4">
+                            Anuluj
+                        </a>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 

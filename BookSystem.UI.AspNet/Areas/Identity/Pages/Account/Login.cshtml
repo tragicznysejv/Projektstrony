@@ -1,0 +1,52 @@
+﻿@page
+@model BookSystem.UI.AspNet.Areas.Identity.Pages.Account.LoginModel
+@{
+    ViewData["Title"] = "Logowanie";
+}
+
+<div class="row justify-content-center mt-4 mb-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm" style="background-color: var(--card-bg); border-color: var(--border-beige);">
+            <div class="card-header text-center py-3" style="background-color: var(--nav-beige); border-bottom-color: var(--border-beige);">
+                <h1 class="h3 mb-0" style="color: var(--text-dark);">@ViewData["Title"]</h1>
+            </div>
+            <div class="card-body p-4">
+                <form id="account" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="name@example.com" />
+                        <label asp-for="Input.Email"></label>
+                        <span asp-validation-for="Input.Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" placeholder="hasło" />
+                        <label asp-for="Input.Password"></label>
+                        <span asp-validation-for="Input.Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" asp-for="Input.RememberMe" />
+                        <label class="form-check-label" asp-for="Input.RememberMe"></label>
+                    </div>
+
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-beige mb-3">
+                        Zaloguj się
+                    </button>
+
+                    <p class="text-center mb-0">
+                        <span class="text-muted">Nie masz jeszcze konta?</span>
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="fw-bold text-decoration-none" style="color: var(--accent-brown);">
+                            Zarejestruj się
+                        </a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
