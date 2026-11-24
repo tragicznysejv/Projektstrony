@@ -9,6 +9,7 @@ namespace BookSystem.UI.AspNet.Controllers;
 /// <summary>
 /// Kontroler zarządzający półkami użytkowników w systemie. (dodawanie książek do półki, wyświetlanie półki użytkownika)
 /// </summary>
+[Authorize]
 public class ShelfsController : Controller
 {
     private readonly BookSystemDbContext _context;
@@ -80,15 +81,36 @@ public class ShelfsController : Controller
 
         return RedirectToAction("Details", "Books", new { id = bookId });
     }
+    /// <summary>
+    /// Wyświetla stronę z prośbą o potwierdzenie usunięcia książki z półki.
+    /// </summary>
+    /// <param name="bookId">Identyfikator książki do usunięcia.</param>
+    /// <returns>Widok potwierdzenia lub błąd 404, jeśli książki nie ma na półce.</returns>
+
+    [HttpGet]
+    public async Task<IActionResult> RemoveFromShelf(int bookId)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var shelfEntry = await _context.Shelfs
+            .Include(s => s.Book)
+            .FirstOrDefaultAsync(s => s.UserId == userId && s.BookId == bookId);
+
+        if(shelfEntry == null)
+        {
+            return NotFound();
+        }
+        return View(shelfEntry);
+    }
 
     /// <summary>
     /// Usuwa książkę z wirtualnej półki użytkownika na podstawie identyfikatora książki.
     /// </summary>
     /// <param name="bookId">Identyfikator książki</param>
     /// <returns>Przekierowanie do widoku własnej półki.</returns>
-    [HttpPost]
+    [HttpPost,ActionName("RemoveFromShelf")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> RemoveFromShelf(int bookId)
+    public async Task<IActionResult> RemoveFromShelfsConfirmed(int bookId)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -101,4 +123,5 @@ public class ShelfsController : Controller
         }
         return RedirectToAction(nameof(Index));
     }
+    
 }
